@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="RasterRiot">
+  <rect width="512" height="512" rx="96" fill="#0a0d0c"/>
+  <path fill="#c7ff38" d="M78 82h224v64H78zm0 96h160v64H78zm0 96h224v64H78zm0 96h160v64H78z"/>
+  <path fill="#ff7058" d="m310 178 124 0v64H310zm-40 96h164v64H270zm40 96h124v64H310z"/>
+  <path fill="#eff5ed" d="m270 82 58 0-86 352h-58z"/>
+</svg>

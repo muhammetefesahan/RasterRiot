@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0a0d0c">
+  <meta name="description" content="Görselleri tarayıcında toplu sıkıştır, boyutlandır, dönüştür ve metadata'dan arındır. Dosyaların cihazından çıkmaz.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; worker-src 'self'; manifest-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'">
+  <link rel="canonical" href="https://muhammetefesahan.github.io/RasterRiot/">
+  <link rel="icon" href="public/icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="src/styles.css">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="RasterRiot — Yerel görsel laboratuvarı">
+  <meta property="og:description" content="Görseller girer. Veri çıkmaz. 200 dosyaya kadar toplu dönüştürme, sıkıştırma ve metadata temizliği.">
+  <meta property="og:url" content="https://muhammetefesahan.github.io/RasterRiot/">
+  <meta property="og:image" content="https://muhammetefesahan.github.io/RasterRiot/public/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="RasterRiot — Görseller girer. Veri çıkmaz.">
+  <meta name="twitter:description" content="Tarayıcıda çalışan, sıfır yüklemeli toplu görsel laboratuvarı.">
+  <meta name="twitter:image" content="https://muhammetefesahan.github.io/RasterRiot/public/og.png">
+  <title>RasterRiot — Yerel görsel laboratuvarı</title>
+</head>
+<body>
+  <a class="skip-link" href="#main">İçeriğe geç</a>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="RasterRiot ana sayfa"><span class="brand-slash">R//R</span><span>Raster<strong>Riot</strong></span></a>
+    <div class="trust-strip" aria-label="Gizlilik özellikleri">
+      <span><i class="status-dot"></i>%100 cihazında</span>
+      <span><i class="status-dot"></i>0 ağ isteği</span>
+      <span><i class="status-dot"></i>EXIF/GPS temizlenir</span>
+    </div>
+    <button class="button button-lime" id="quick-download" type="button" disabled>Seçileni indir <span>↓</span></button>
+  </header>
+
+  <main class="lab-shell" id="main">
+    <aside class="queue-panel" aria-labelledby="queue-title">
+      <div class="panel-heading"><div><span class="kicker">01 // KUYRUK</span><h2 id="queue-title">Görseller</h2></div><output id="queue-count">00</output></div>
+      <div class="queue-list" id="queue-list" role="listbox" aria-label="İşlenecek görseller" tabindex="0">
+        <p class="queue-empty">Kuyruk boş. PNG, JPEG, WebP veya AVIF ekle.</p>
+      </div>
+      <button class="button button-ghost full-width" id="add-more" type="button">+ Görsel ekle</button>
+    </aside>
+
+    <section class="stage" aria-labelledby="page-title">
+      <div class="stage-heading">
+        <div><span class="kicker">YEREL // HIZLI // İZ BIRAKMAZ</span><h1 id="page-title">Görseller girer.<br><em>Veri çıkmaz.</em></h1></div>
+        <p>200 dosyayı tek hamlede küçült, dönüştür, kırp, filigranla ve konum bilgisi dahil metadata'dan arındır. Sunucu yok; yükleme yok.</p>
+      </div>
+
+      <button class="drop-zone" id="drop-zone" type="button">
+        <span class="drop-icon" aria-hidden="true">⌁</span>
+        <span class="drop-main">GÖRSELLERİ BURAYA BIRAK</span>
+        <span class="drop-sub">veya seçmek için tıkla · en fazla 200 dosya / dosya başına 50 MB</span>
+        <span class="privacy-proof">Dosyalar bu sekmeden dışarı gönderilmez.</span>
+      </button>
+      <input class="sr-only" id="file-input" type="file" accept="image/png,image/jpeg,image/webp,image/avif,.png,.jpg,.jpeg,.webp,.avif,.heic,.heif" multiple>
+      <p class="support-note" id="support-note">Format desteği denetleniyor…</p>
+
+      <div class="preset-row" role="group" aria-label="Hızlı reçeteler">
+        <span class="kicker">REÇETE</span>
+        <button class="preset active" data-preset="web" type="button">Web hızlı<small>WebP · 1920 · %80</small></button>
+        <button class="preset" data-preset="square" type="button">Sosyal kare<small>1080 × 1080</small></button>
+        <button class="preset" data-preset="og" type="button">OG kartı<small>1200 × 630</small></button>
+        <button class="preset" data-preset="email" type="button">E-posta<small>JPEG · 1280</small></button>
+        <button class="preset" data-preset="clean" type="button">Sadece temizle<small>Ölçüyü koru</small></button>
+      </div>
+
+      <section class="compare-shell" aria-labelledby="preview-title">
+        <header>
+          <div><span class="kicker">CANLI KIYAS</span><h2 id="preview-title">Önce / sonra</h2></div>
+          <span class="clean-badge" id="format-proof">EXIF + GPS TEMİZ</span>
+        </header>
+        <div class="compare-stage" id="compare-stage">
+          <div class="empty-preview" id="empty-preview"><span class="pixel-mark" aria-hidden="true"></span><strong>İlk görseli bırak</strong><p>Önizleme burada, anında ve tamamen cihazında oluşacak.</p></div>
+          <img class="preview-image before-image" id="before-image" alt="Orijinal görsel önizlemesi">
+          <div class="after-layer" id="after-layer"><img class="preview-image after-image" id="after-image" alt="İşlenmiş görsel önizlemesi"></div>
+          <span class="compare-divider" id="compare-divider" aria-hidden="true"></span>
+          <span class="before-label">ÖNCE</span><span class="after-label">SONRA</span>
+        </div>
+        <div class="compare-controls">
+          <label for="compare-slider">Karşılaştırma çizgisi</label>
+          <input id="compare-slider" type="range" min="0" max="100" value="50" disabled>
+          <button class="button button-ghost" id="compare-toggle" type="button" disabled>Önce / sonra değiştir</button>
+        </div>
+        <div class="stats-grid">
+          <div><span>ÖNCE</span><strong id="source-size">—</strong></div>
+          <div><span>SONRA</span><strong id="output-size">—</strong></div>
+          <div><span>KAZANÇ</span><strong id="savings">—</strong></div>
+          <div><span>ÇIKTI</span><strong id="dimensions">—</strong></div>
+        </div>
+      </section>
+    </section>
+
+    <aside class="controls-panel" aria-labelledby="settings-title">
+      <div class="panel-heading"><div><span class="kicker">02 // REÇETE</span><h2 id="settings-title">İşleme ayarları</h2></div></div>
+      <form id="settings-form">
+        <fieldset>
+          <label>Çıktı formatı<select id="format" name="format"><option value="image/webp">WebP</option><option value="image/jpeg">JPEG</option><option value="image/png">PNG</option><option value="image/avif">AVIF</option><option value="source">Kaynak format</option></select></label>
+          <label>Kalite <output id="quality-output">80%</output><input id="quality" name="quality" type="range" min="10" max="100" value="80"></label>
+          <div class="two-cols">
+            <label>Maks. genişlik<input id="width" name="width" type="number" min="0" max="12000" step="1" value="1920" inputmode="numeric"></label>
+            <label>Maks. yükseklik<input id="height" name="height" type="number" min="0" max="12000" step="1" value="0" inputmode="numeric"></label>
+          </div>
+          <div class="two-cols">
+            <label>Yerleşim<select id="fit" name="fit"><option value="contain">Sığdır</option><option value="cover">Kırp / doldur</option><option value="stretch">Esnet</option></select></label>
+            <label>Arka plan<input id="background" name="background" type="color" value="#101412"></label>
+          </div>
+        </fieldset>
+
+        <details>
+          <summary>İleri düzenleme <span>＋</span></summary>
+          <div class="advanced-grid">
+            <label>Döndür<select id="rotation" name="rotation"><option value="0">0°</option><option value="90">90°</option><option value="180">180°</option><option value="270">270°</option></select></label>
+            <div class="two-cols check-row"><label><input id="flip-x" name="flipX" type="checkbox"> Yatay çevir</label><label><input id="flip-y" name="flipY" type="checkbox"> Dikey çevir</label></div>
+            <label>Parlaklık <output id="brightness-output">100%</output><input id="brightness" name="brightness" type="range" min="0" max="200" value="100"></label>
+            <label>Kontrast <output id="contrast-output">100%</output><input id="contrast" name="contrast" type="range" min="0" max="200" value="100"></label>
+            <label>Doygunluk <output id="saturation-output">100%</output><input id="saturation" name="saturation" type="range" min="0" max="200" value="100"></label>
+            <label>Gri ton <output id="grayscale-output">0%</output><input id="grayscale" name="grayscale" type="range" min="0" max="100" value="0"></label>
+            <label>Filigran metni<input id="watermark" name="watermark" type="text" maxlength="80" placeholder="İsteğe bağlı"></label>
+            <div class="two-cols"><label>Konum<select id="watermark-position" name="watermarkPosition"><option value="bottom-right">Sağ alt</option><option value="bottom-left">Sol alt</option><option value="top-right">Sağ üst</option><option value="top-left">Sol üst</option><option value="center">Orta</option></select></label><label>Boyut %<input id="watermark-size" name="watermarkSize" type="number" min="1" max="12" value="4"></label></div>
+            <label>Filigran opaklığı <output id="watermark-opacity-output">55%</output><input id="watermark-opacity" name="watermarkOpacity" type="range" min="5" max="100" value="55"></label>
+          </div>
+        </details>
+      </form>
+
+      <div class="batch-card">
+        <span class="kicker">03 // TOPLU ÇIKTI</span>
+        <div><strong id="batch-counter">[000/000]</strong><span id="batch-status">Hazır</span></div>
+        <progress id="batch-progress" max="100" value="0">0%</progress>
+        <button class="button button-lime full-width" id="process-button" type="button" disabled>Hepsini işle + ZIP</button>
+        <button class="button button-ghost full-width cancel-button" id="cancel-button" type="button" hidden>İşlemi durdur</button>
+        <p class="result-summary" id="result-summary" aria-live="polite"></p>
+      </div>
+      <p class="network-proof"><span class="status-dot"></span><strong>Tarayıcı kuralı:</strong> <code>connect-src 'none'</code><br>Uygulama ağ bağlantısı kuramaz.</p>
+    </aside>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="sr-only" id="announcer" aria-live="polite"></div>
+  <script src="src/core.js" defer></script>
+  <script src="src/zip.js" defer></script>
+  <script src="src/app.js" defer></script>
+</body>
+</html>

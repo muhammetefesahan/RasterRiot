@@ -1,0 +1,19 @@
+{
+  "name": "RasterRiot — Yerel Görsel Laboratuvarı",
+  "short_name": "RasterRiot",
+  "description": "Görselleri cihazından çıkarmadan toplu işle.",
+  "lang": "tr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0a0d0c",
+  "theme_color": "#0a0d0c",
+  "icons": [
+    {
+      "src": "public/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
